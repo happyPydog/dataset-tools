@@ -1,27 +1,37 @@
-[metadata]
-name = "<project_name>"
-author = "happyPydog"
-url = "https://github.com/happyPydog/<project_name>"
+[tool.poetry]
+name = "dataset-tools"
+version = "0.0.1"
+description = "The utils of dataset."
+authors = ["Rammstein-1994 <lanc840930.mg09@nycu.edu.tw>"]
+repository = "https://github.com/happyPydog/dataset-tools"
+readme = "README.md"
+packages = [
+    { include = "dataset_tools", from = "src"},
+]
+
+
+[tool.poetry.dependencies]
+python = "^3.12"
+numpy = "^1.26.4"
+pandas = "^2.2.1"
+scikit-learn = "^1.4.1.post1"
+datasets = "^2.18.0"
+lightning = "^2.2.1"
+torch = "^2.2.1"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.1.1"
+pytest-cov = "^4.1.0"
+black = {extras = ["jupyter"], version = "^24.3.0"}
+flake8 = "^7.0.0"
+isort = "^5.13.2"
+mypy = "^1.9.0"
+python-dotenv = "^1.0.1"
 
 [build-system]
-requires = [
-    "setuptools",
-    "wheel",
-]
-
-[tool.black]
-line-length = 120
-
-[tool.flake8]
-max-line-length = 120
-exclude = [
-    "tests",
-    ".venv",
-]
-
-[tool.istor]
-lines-after-import = 2
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
 
 [tool.mypy]
 ignore_missing_imports = true
-show_error_codes = true
