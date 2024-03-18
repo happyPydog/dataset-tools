@@ -62,7 +62,7 @@ class NumericalDataset(BasePandasDataset):
         especially, the timestamp column is date type.
         """
         ids = self._generate_ids(self.sample_size)
-        data: list[dict[str, t.Any]] = [
+        data = [
             {
                 **{
                     self.key_column.value: id_,
@@ -117,29 +117,28 @@ class TimeSeriesDataset(BasePandasDataset):
         """
         ids = self._generate_ids(self.sample_size)
         date_range = pd.date_range(start=self.start_date, end=self.end_date)
-        data: list[dict[str, t.Any]] = [
+        data = [
             {
                 **{
                     self.key_column.value: id_,
                     self.timestamp_column.value: timestamp,
                     self.label_column.value: np.where(np.random.rand() < 0.5, 1, 0),
                 },
-                **self._generate_numerical_features(self.feature_size),
+                **self._generate_numerical_features(),
             }
             for id_ in ids
             for timestamp in date_range
         ]
         return pd.DataFrame(data)
 
-    def _generate_numerical_features(
-        self, size: int
-    ) -> dict[str, t.Union[float, np.ndarray]]:
+    def _generate_numerical_features_one_sample(self) -> np.ndarray:
+        return np.where(
+            np.random.rand() < self.missing_ratio, np.nan, np.random.randn()
+        )
+
+    def _generate_numerical_features(self) -> dict[str, float | np.ndarray]:
         return {
-            f"feature_{idx}": np.where(
-                np.random.rand(size) < self.missing_ratio,
-                np.nan,
-                np.random.randn(size),
-            )
+            f"feature_{idx}": self._generate_numerical_features_one_sample()
             for idx in range(1, self.feature_size + 1)
         }
 
